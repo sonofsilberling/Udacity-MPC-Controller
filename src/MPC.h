@@ -112,10 +112,10 @@ public:
     Dvector g_lowerbound; // value constraint for each corresponding constraint expression
     Dvector g_upperbound; // value constraint for each corresponding constraint expression
 
-    // Predicted waypoints - always N of those
+    // Predicted waypoints based on polynomial - always N of those
     vector<double> next_xs;
     vector<double> next_ys;
-    // Predicted waypoints - always N of those
+    // Predicted waypoints based on optimizer - always N of those
     vector<double> mpc_xs;
     vector<double> mpc_ys;
 
