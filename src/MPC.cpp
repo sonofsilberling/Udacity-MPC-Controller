@@ -1,5 +1,4 @@
 #include "MPC.h"
-#include <sstream>
 
 using CppAD::AD;
 using std::vector;
@@ -24,19 +23,11 @@ void FG_polynomial::operator()(ADvector& fg, const ADvector& x) {
 //y y_i=y_(i-1)+  sin⁡〖〖(psi〗_(i-1))* v_(i-1)*dt〗
 //v v_i=v_(i-1)+ a_(i-1)*dt
 //psi 〖psi〗_i=〖psi〗_(i-1)+v_(i-1)  *  d_(i-1)*dt/Lf
-//cte 〖cte〗_i=〖( polyeval(〗⁡〖x_(i-1))- y_(i-1)  )+〗  sin⁡〖〖(psi〗_(i-1))* v_(i-1)*dt〗
+//cte 〖cte〗_i=〖( polyeval(〗⁡〖x_(i-1))- y_(i-1)  )+〗  sin⁡〖〖(epsi〗_(i-1))* v_(i-1)*dt〗
 //epsi  〖epsi〗_i=〖( 〖psi〗_(i-1 )- atan⁡polyeval'⁡〖x_(i-1) 〗 〗⁡〖 )+〗 v_(i-1)  *  d_(i-1)*dt/Lf
 
 ADvector FG_motion::globalKinematic(const ADvector& state, const ADvector& actuators, const double& dt) {
     ADvector next_state(6);
-
-
-    // const auto px1_f = px0 + v0 * CppAD::cos(psi0) * dt;
-    // const auto py1_f = py0 + v0 * CppAD::sin(psi0) * dt;
-    // const auto psi1_f = psi0 + v0 * (-delta0) / Lf * dt;
-    // const auto v1_f = v0 + a0 * dt;
-    // const auto cte1_f = py_desired - py0 + v0 * CppAD::sin(epsi0) * dt;
-    // const auto epsi1_f = psi0 - psi_desired + v0 * (-delta0) / Lf * dt;
 
     next_state[IDX_x] = state[IDX_x] + state[IDX_v] * CppAD::cos(state[IDX_psi]) * dt;
     next_state[IDX_y] = state[IDX_y] + state[IDX_v] * CppAD::sin(state[IDX_psi]) * dt;
@@ -327,18 +318,6 @@ void MPC::fitWaypoints(vector<double>& ptsx, vector<double>& ptsy) {
 
     CppAD::ipopt::solve_result<Dvector> solution;
     bool ok = true;
-
-
-    // if (LOG) {
-    //     log.open("logfile.txt",std::ios_base::app | std::ios_base::out);
-    //     log << "ptsx:" << "\n";
-    //     for (unsigned int i=0;i<ptsx.size();i++)
-    //         log << ptsx[i] << "\n";
-    //     log << "ptsy:" << "\n";
-    //     for (unsigned int i=0;i<ptsx.size();i++)
-    //         log << ptsy[i] << "\n";
-    //     log.close();
-    // }
 
     // Initialize values
     for (unsigned int i = 0; i < coeffs.size(); i++) {
