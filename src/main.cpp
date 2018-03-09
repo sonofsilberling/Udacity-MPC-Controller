@@ -11,24 +11,9 @@
 using json = nlohmann::json;
 using namespace std;
 
-// For converting back and forth between radians and degrees.
-
-constexpr double pi() {
-    return M_PI;
-}
-
-double deg2rad(double x) {
-    return x * pi() / 180;
-}
-
-double rad2deg(double x) {
-    return x * 180 / pi();
-}
-
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
 // else the empty string "" will be returned.
-
 string hasData(string s) {
     auto found_null = s.find("null");
     auto b1 = s.find_first_of("[");
@@ -54,7 +39,7 @@ int main() {
         // The 4 signifies a websocket message
         // The 2 signifies a websocket event
         string sdata = string(data).substr(0, length);
-//        cout << sdata << endl;
+
         if (sdata.size() > 2 && sdata[0] == '4' && sdata[1] == '2') {
             string s = hasData(sdata);
             if (s != "") {
